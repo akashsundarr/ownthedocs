@@ -1,6 +1,7 @@
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Switch } from './ui/switch';
+import { Currency, formatCurrency } from '@/lib/currency';
 
 interface SummaryBoxProps {
   subtotal: number;
@@ -8,6 +9,7 @@ interface SummaryBoxProps {
   gstPercentage: number;
   gst: number;
   total: number;
+  currency: Currency;
   onGstToggle: (enabled: boolean) => void;
   onGstPercentageChange: (percentage: number) => void;
 }
@@ -18,6 +20,7 @@ export function SummaryBox({
   gstPercentage,
   gst,
   total,
+  currency,
   onGstToggle,
   onGstPercentageChange,
 }: SummaryBoxProps) {
@@ -26,7 +29,7 @@ export function SummaryBox({
       <div className="max-w-md ml-auto space-y-4">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium text-gray-900">${subtotal.toFixed(2)}</span>
+          <span className="font-medium text-gray-900">{formatCurrency(subtotal, currency)}</span>
         </div>
 
         <div className="flex items-center justify-between py-3 border-t border-b border-gray-200">
@@ -59,14 +62,14 @@ export function SummaryBox({
               step="0.01"
             />
             <span className="text-sm text-gray-600">
-              = ${gst.toFixed(2)}
+              = {formatCurrency(gst, currency)}
             </span>
           </div>
         )}
 
         <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-4">
           <span className="text-gray-900">Total</span>
-          <span className="text-gray-900">${total.toFixed(2)}</span>
+          <span className="text-gray-900">{formatCurrency(total, currency)}</span>
         </div>
       </div>
     </div>

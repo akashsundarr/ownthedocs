@@ -9,6 +9,7 @@ import { LineItemsTable } from '@/components/LineItemsTable';
 import { SummaryBox } from '@/components/SummaryBox';
 import { NotesSection } from '@/components/NotesSection';
 import { PDFPreview } from '@/components/PDFPreview';
+import { CurrencySelector } from '@/components/CurrencySelector';
 import {
   LineItem,
   calculateLineItemTotal,
@@ -17,6 +18,7 @@ import {
   calculateTotal,
 } from '@/lib/calculateTotals';
 import { exportToPDF } from '@/lib/pdfExport';
+import { Currency, convertFromINR, convertToINR } from '@/lib/currency';
 import { Download, RotateCcw } from 'lucide-react';
 
 function generateDocumentNumber(type: 'quotation' | 'invoice'): string {
@@ -71,6 +73,10 @@ export default function DocumentBuilder() {
   // Pricing
   const [gstEnabled, setGstEnabled] = useState(true);
   const [gstPercentage, setGstPercentage] = useState(18);
+
+  // Currency
+  const [currency, setCurrency] = useState<Currency>('INR');
+  const [conversionEnabled, setConversionEnabled] = useState(false);
 
   // Notes
   const [notes, setNotes] = useState(
@@ -156,6 +162,7 @@ export default function DocumentBuilder() {
       gst,
       total,
       notes,
+      currency,
     });
   };
 
@@ -212,6 +219,13 @@ export default function DocumentBuilder() {
 
             <TabsContent value="quotation" className="space-y-8 mt-8">
               <div className="bg-white rounded-lg p-8 shadow-sm">
+                <CurrencySelector
+                  currency={currency}
+                  conversionEnabled={conversionEnabled}
+                  onCurrencyChange={setCurrency}
+                  onConversionToggle={setConversionEnabled}
+                />
+                <div className="py-8" />
                 <HeaderForm
                   documentType="quotation"
                   documentNumber={documentNumber}
@@ -245,6 +259,7 @@ export default function DocumentBuilder() {
                 <div className="py-8" />
                 <LineItemsTable
                   items={updatedLineItems}
+                  currency={currency}
                   onAddItem={handleAddLineItem}
                   onDeleteItem={handleDeleteLineItem}
                   onDuplicateItem={handleDuplicateLineItem}
@@ -257,6 +272,7 @@ export default function DocumentBuilder() {
                   gstPercentage={gstPercentage}
                   gst={gst}
                   total={total}
+                  currency={currency}
                   onGstToggle={setGstEnabled}
                   onGstPercentageChange={setGstPercentage}
                 />
@@ -285,6 +301,13 @@ export default function DocumentBuilder() {
 
             <TabsContent value="invoice" className="space-y-8 mt-8">
               <div className="bg-white rounded-lg p-8 shadow-sm">
+                <CurrencySelector
+                  currency={currency}
+                  conversionEnabled={conversionEnabled}
+                  onCurrencyChange={setCurrency}
+                  onConversionToggle={setConversionEnabled}
+                />
+                <div className="py-8" />
                 <HeaderForm
                   documentType="invoice"
                   documentNumber={documentNumber}
@@ -318,6 +341,7 @@ export default function DocumentBuilder() {
                 <div className="py-8" />
                 <LineItemsTable
                   items={updatedLineItems}
+                  currency={currency}
                   onAddItem={handleAddLineItem}
                   onDeleteItem={handleDeleteLineItem}
                   onDuplicateItem={handleDuplicateLineItem}
@@ -330,6 +354,7 @@ export default function DocumentBuilder() {
                   gstPercentage={gstPercentage}
                   gst={gst}
                   total={total}
+                  currency={currency}
                   onGstToggle={setGstEnabled}
                   onGstPercentageChange={setGstPercentage}
                 />
@@ -384,6 +409,7 @@ export default function DocumentBuilder() {
               gst={gst}
               total={total}
               notes={notes}
+              currency={currency}
             />
           </div>
         </div>

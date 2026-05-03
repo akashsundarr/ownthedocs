@@ -1,4 +1,5 @@
 import html2pdf from 'html2pdf.js';
+import { Currency } from './currency';
 
 export interface DocumentData {
   documentType: 'quotation' | 'invoice';
@@ -27,6 +28,7 @@ export interface DocumentData {
   gst: number;
   total: number;
   notes: string;
+  currency: Currency;
 }
 
 export function exportToPDF(data: DocumentData) {

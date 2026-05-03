@@ -2,9 +2,11 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Trash2, Copy, Plus } from 'lucide-react';
 import { LineItem } from '@/lib/calculateTotals';
+import { Currency, formatCurrency } from '@/lib/currency';
 
 interface LineItemsTableProps {
   items: LineItem[];
+  currency: Currency;
   onAddItem: () => void;
   onDeleteItem: (id: string) => void;
   onDuplicateItem: (id: string) => void;
@@ -13,6 +15,7 @@ interface LineItemsTableProps {
 
 export function LineItemsTable({
   items,
+  currency,
   onAddItem,
   onDeleteItem,
   onDuplicateItem,
@@ -104,7 +107,7 @@ export function LineItemsTable({
                 </td>
                 <td className="py-4 px-3 text-right">
                   <span className="text-sm font-medium text-gray-900">
-                    {item.total.toFixed(2)}
+                    {formatCurrency(item.total, currency)}
                   </span>
                 </td>
                 <td className="py-4 px-3 text-center space-x-1">

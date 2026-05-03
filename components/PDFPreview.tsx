@@ -1,5 +1,6 @@
 import React from 'react';
 import { LineItem } from '@/lib/calculateTotals';
+import { Currency, formatCurrency } from '@/lib/currency';
 
 interface PDFPreviewProps {
   documentType: 'quotation' | 'invoice';
@@ -22,6 +23,7 @@ interface PDFPreviewProps {
   gst: number;
   total: number;
   notes: string;
+  currency: Currency;
 }
 
 export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
@@ -47,6 +49,7 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
       gst,
       total,
       notes,
+      currency,
     } = props;
 
     return (
@@ -149,10 +152,10 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
                     {item.quantity}
                   </td>
                   <td className="py-3 px-2 text-sm text-right text-gray-900">
-                    ${item.price.toFixed(2)}
+                    {formatCurrency(item.price, currency)}
                   </td>
                   <td className="py-3 px-2 text-sm text-right font-medium text-gray-900">
-                    ${item.total.toFixed(2)}
+                    {formatCurrency(item.total, currency)}
                   </td>
                 </tr>
               ))}
@@ -166,7 +169,7 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
             <div className="flex justify-between py-2 border-t-2 border-gray-900">
               <span className="text-sm font-semibold text-gray-900">Subtotal</span>
               <span className="text-sm font-semibold text-gray-900">
-                ${subtotal.toFixed(2)}
+                {formatCurrency(subtotal, currency)}
               </span>
             </div>
             {gstEnabled && (
@@ -175,14 +178,14 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
                   GST ({gstPercentage}%)
                 </span>
                 <span className="text-sm text-gray-900">
-                  ${gst.toFixed(2)}
+                  {formatCurrency(gst, currency)}
                 </span>
               </div>
             )}
             <div className="flex justify-between py-3 border-t-2 border-b-2 border-gray-900">
               <span className="font-bold text-gray-900">Total</span>
               <span className="font-bold text-gray-900">
-                ${total.toFixed(2)}
+                {formatCurrency(total, currency)}
               </span>
             </div>
           </div>
