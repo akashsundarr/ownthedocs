@@ -123,3 +123,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.pdf-safe {
+  --background: #ffffff;
+  --foreground: #000000;
+  --border: #e5e7eb;
+  --muted-foreground: #6b7280;
+}

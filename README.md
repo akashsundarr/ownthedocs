@@ -1,35 +1,106 @@
-# ownthedocs
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
-
-## Built with v0
-
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
-
-[Continue working on v0 →](https://v0.app/chat/projects/prj_ElKJXq1TUbkFFHoGN9A12cY2PALE)
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
+ownthedocs
+├─ app
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ components
+│  ├─ ClientForm.tsx
+│  ├─ CSVImporter.tsx
+│  ├─ CurrencySelector.tsx
+│  ├─ HeaderForm.tsx
+│  ├─ LineItemsTable.tsx
+│  ├─ NotesSection.tsx
+│  ├─ PDFPreview.tsx
+│  ├─ SummaryBox.tsx
+│  ├─ theme-provider.tsx
+│  └─ ui
+│     ├─ accordion.tsx
+│     ├─ alert-dialog.tsx
+│     ├─ alert.tsx
+│     ├─ aspect-ratio.tsx
+│     ├─ avatar.tsx
+│     ├─ badge.tsx
+│     ├─ breadcrumb.tsx
+│     ├─ button-group.tsx
+│     ├─ button.tsx
+│     ├─ calendar.tsx
+│     ├─ card.tsx
+│     ├─ carousel.tsx
+│     ├─ chart.tsx
+│     ├─ checkbox.tsx
+│     ├─ collapsible.tsx
+│     ├─ command.tsx
+│     ├─ context-menu.tsx
+│     ├─ dialog.tsx
+│     ├─ drawer.tsx
+│     ├─ dropdown-menu.tsx
+│     ├─ empty.tsx
+│     ├─ field.tsx
+│     ├─ form.tsx
+│     ├─ hover-card.tsx
+│     ├─ input-group.tsx
+│     ├─ input-otp.tsx
+│     ├─ input.tsx
+│     ├─ item.tsx
+│     ├─ kbd.tsx
+│     ├─ label.tsx
+│     ├─ menubar.tsx
+│     ├─ navigation-menu.tsx
+│     ├─ pagination.tsx
+│     ├─ popover.tsx
+│     ├─ progress.tsx
+│     ├─ radio-group.tsx
+│     ├─ resizable.tsx
+│     ├─ scroll-area.tsx
+│     ├─ select.tsx
+│     ├─ separator.tsx
+│     ├─ sheet.tsx
+│     ├─ sidebar.tsx
+│     ├─ skeleton.tsx
+│     ├─ slider.tsx
+│     ├─ sonner.tsx
+│     ├─ spinner.tsx
+│     ├─ switch.tsx
+│     ├─ table.tsx
+│     ├─ tabs.tsx
+│     ├─ textarea.tsx
+│     ├─ toast.tsx
+│     ├─ toaster.tsx
+│     ├─ toggle-group.tsx
+│     ├─ toggle.tsx
+│     ├─ tooltip.tsx
+│     ├─ use-mobile.tsx
+│     └─ use-toast.ts
+├─ components.json
+├─ hooks
+│  ├─ use-mobile.ts
+│  └─ use-toast.ts
+├─ lib
+│  ├─ calculateTotals.ts
+│  ├─ csvImport.ts
+│  ├─ currency.ts
+│  ├─ pdfExport.ts
+│  └─ utils.ts
+├─ next-env.d.ts
+├─ next.config.mjs
+├─ package.json
+├─ pnpm-lock.yaml
+├─ postcss.config.mjs
+├─ public
+│  ├─ apple-icon.png
+│  ├─ icon-dark-32x32.png
+│  ├─ icon-light-32x32.png
+│  ├─ icon.svg
+│  ├─ placeholder-logo.png
+│  ├─ placeholder-logo.svg
+│  ├─ placeholder-user.jpg
+│  ├─ placeholder.jpg
+│  └─ placeholder.svg
+├─ README.md
+├─ styles
+│  └─ globals.css
+└─ tsconfig.json
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
-
-<a href="https://v0.app/chat/api/kiro/clone/akashsundarr/ownthedocs" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+```

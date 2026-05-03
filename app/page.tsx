@@ -20,6 +20,7 @@ import {
 } from '@/lib/calculateTotals';
 import { exportToPDF } from '@/lib/pdfExport';
 import { Currency, convertFromINR, convertToINR } from '@/lib/currency';
+import { formatDateString } from '@/lib/utils';
 import { Download, RotateCcw } from 'lucide-react';
 
 function generateDocumentNumber(type: 'quotation' | 'invoice'): string {
@@ -397,8 +398,11 @@ export default function DocumentBuilder() {
               documentType={documentType}
               documentNumber={documentNumber}
               date={date}
+              dateFormatted={formatDateString(date)}
               validTill={validTill}
+              validTillFormatted={validTill ? formatDateString(validTill) : undefined}
               dueDate={dueDate}
+              dueDateFormatted={dueDate ? formatDateString(dueDate) : undefined}
               businessName={businessName}
               businessEmail={businessEmail}
               businessPhone={businessPhone}
