@@ -10,6 +10,7 @@ import { SummaryBox } from '@/components/SummaryBox';
 import { NotesSection } from '@/components/NotesSection';
 import { PDFPreview } from '@/components/PDFPreview';
 import { CurrencySelector } from '@/components/CurrencySelector';
+import { CSVImporter } from '@/components/CSVImporter';
 import {
   LineItem,
   calculateLineItemTotal,
@@ -166,28 +167,28 @@ export default function DocumentBuilder() {
     });
   };
 
+  const handleCSVImport = (importedItems: LineItem[]) => {
+    setLineItems(importedItems);
+  };
+
   const handleReset = () => {
-    setDocumentNumber(generateDocumentNumber(documentType));
+    setDocumentType('quotation');
+    setDocumentNumber(generateDocumentNumber('quotation'));
     setDate(new Date().toISOString().split('T')[0]);
-    setValidTill(getNextDate(30));
-    setDueDate(getNextDate(15));
+    setValidTill('');
+    setDueDate('');
+    setLineItems([]);
+    setBusinessName('OwnTheSite');
+    setBusinessEmail('info@ownthesite.com');
+    setBusinessPhone('+91 9876543210');
+    setBusinessAddress('123 Innovation Street, Delhi, India');
     setClientName('');
     setClientEmail('');
     setClientPhone('');
     setClientCompany('');
-    setLineItems([
-      {
-        id: '1',
-        serviceName: '',
-        description: '',
-        quantity: 0,
-        price: 0,
-        total: 0,
-      },
-    ]);
-    setNotes(
-      '50% upfront, 50% on completion\nTimeline: 5–10 days\nHosting/domain not included'
-    );
+    setGstEnabled(true);
+    setGstPercentage(18);
+    setNotes('50% upfront, 50% on completion\nTimeline: 5–10 days\nHosting/domain not included');
   };
 
   return (
@@ -256,6 +257,8 @@ export default function DocumentBuilder() {
                   onClientPhoneChange={setClientPhone}
                   onClientCompanyChange={setClientCompany}
                 />
+                <div className="py-8" />
+                <CSVImporter onImport={handleCSVImport} />
                 <div className="py-8" />
                 <LineItemsTable
                   items={updatedLineItems}
@@ -338,6 +341,8 @@ export default function DocumentBuilder() {
                   onClientPhoneChange={setClientPhone}
                   onClientCompanyChange={setClientCompany}
                 />
+                <div className="py-8" />
+                <CSVImporter onImport={handleCSVImport} />
                 <div className="py-8" />
                 <LineItemsTable
                   items={updatedLineItems}
