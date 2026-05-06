@@ -5,12 +5,12 @@ import { Currency, formatCurrency } from "@/lib/currency";
 interface PDFPreviewProps {
   documentType: "quotation" | "invoice";
   documentNumber: string;
-  date: string; 
-  dateFormatted: string; 
-  validTill?: string; 
-  validTillFormatted?: string; 
-  dueDate?: string; 
-  dueDateFormatted?: string; 
+  date: string;
+  dateFormatted: string;
+  validTill?: string;
+  validTillFormatted?: string;
+  dueDate?: string;
+  dueDateFormatted?: string;
   businessName: string;
   businessEmail: string;
   businessPhone: string;
@@ -56,21 +56,23 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
     } = props;
 
     return (
-      <div 
-        id="pdf-content" 
-        ref={ref} 
-        // Force exact A4 dimensions at 96 DPI, add generous page margins (p-12), 
+      <div
+        id="pdf-content"
+        ref={ref}
+        // Force exact A4 dimensions at 96 DPI, add generous page margins (p-12),
         // and use shrink-0 so parent web containers can't squish it.
         className="pdf-safe bg-white text-black w-[794px] min-h-[1123px] p-12 shrink-0 mx-auto box-border shadow-sm"
         style={{
-          width: '794px',
-          minHeight: '1123px'
+          width: "794px",
+          minHeight: "1123px",
         }}
       >
         {/* Header */}
         <div className="flex justify-between items-start mb-12">
           <div className="max-w-[50%]">
-            <h1 className="text-3xl font-bold mb-1 text-gray-900">{businessName}</h1>
+            <h1 className="text-3xl font-bold mb-1 text-gray-900">
+              {businessName}
+            </h1>
             <p className="text-sm text-gray-600">{businessEmail}</p>
             <p className="text-sm text-gray-600">{businessPhone}</p>
             {businessAddress && (
@@ -86,7 +88,9 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
             <div className="space-y-1 text-sm">
               <p>
                 <span className="text-gray-500">Number:</span>
-                <span className="ml-2 font-semibold text-gray-900">{documentNumber}</span>
+                <span className="ml-2 font-semibold text-gray-900">
+                  {documentNumber}
+                </span>
               </p>
               <p>
                 <span className="text-gray-500">Date:</span>
@@ -116,7 +120,9 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
 
         {/* Client Section */}
         <div className="mb-12">
-          <h3 className="text-xs font-bold tracking-widest text-gray-500 mb-3 uppercase">BILL TO</h3>
+          <h3 className="text-xs font-bold tracking-widest text-gray-500 mb-3 uppercase">
+            BILL TO
+          </h3>
           <p className="text-lg font-semibold text-gray-900">{clientName}</p>
           {clientCompany && (
             <p className="text-sm text-gray-600 font-medium">{clientCompany}</p>
@@ -151,7 +157,7 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
               {lineItems.map((item) => (
                 <tr key={item.id} className="border-b border-gray-200">
                   <td className="py-4 px-2 text-sm font-medium text-gray-900 align-top">
-                    {item.serviceName}
+                    {item.name} {/* ✅ FIXED */}
                   </td>
                   <td className="py-4 px-2 text-sm text-gray-600 align-top">
                     {item.description}
@@ -207,7 +213,9 @@ export const PDFPreview = React.forwardRef<HTMLDivElement, PDFPreviewProps>(
             <h3 className="text-xs font-bold tracking-widest text-gray-500 mb-2 uppercase">
               NOTES & TERMS
             </h3>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{notes}</p>
+            <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">
+              {notes}
+            </p>
           </div>
         )}
 

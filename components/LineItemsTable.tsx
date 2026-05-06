@@ -1,8 +1,8 @@
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { Trash2, Copy, Plus } from 'lucide-react';
-import { LineItem } from '@/lib/calculateTotals';
-import { Currency, formatCurrency } from '@/lib/currency';
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Trash2, Copy, Plus } from "lucide-react";
+import { LineItem } from "@/lib/calculateTotals";
+import { Currency, formatCurrency } from "@/lib/currency";
 
 interface LineItemsTableProps {
   items: LineItem[];
@@ -53,19 +53,18 @@ export function LineItemsTable({
               <tr key={item.id} className="border-b border-gray-100">
                 <td className="py-4 px-3">
                   <Input
-                    value={item.serviceName}
+                    value={item.name}
                     onChange={(e) =>
-                      onUpdateItem(item.id, 'serviceName', e.target.value)
+                      onUpdateItem(item.id, "name", e.target.value)
                     }
                     placeholder="Service name"
-                    className="border-gray-300 text-sm"
                   />
                 </td>
                 <td className="py-4 px-3">
                   <Input
                     value={item.description}
                     onChange={(e) =>
-                      onUpdateItem(item.id, 'description', e.target.value)
+                      onUpdateItem(item.id, "description", e.target.value)
                     }
                     placeholder="Description"
                     className="border-gray-300 text-sm"
@@ -78,8 +77,8 @@ export function LineItemsTable({
                     onChange={(e) =>
                       onUpdateItem(
                         item.id,
-                        'quantity',
-                        parseFloat(e.target.value) || 0
+                        "quantity",
+                        parseFloat(e.target.value) || 0,
                       )
                     }
                     placeholder="0"
@@ -95,8 +94,8 @@ export function LineItemsTable({
                     onChange={(e) =>
                       onUpdateItem(
                         item.id,
-                        'price',
-                        parseFloat(e.target.value) || 0
+                        "price",
+                        parseFloat(e.target.value) || 0,
                       )
                     }
                     placeholder="0.00"
