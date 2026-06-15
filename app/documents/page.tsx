@@ -20,7 +20,7 @@ import {
   calculateTotal,
 } from '@/lib/calculateTotals';
 import { exportToPDF } from '@/lib/pdfExport';
-import { Currency, convertFromINR, convertToINR } from '@/lib/currency';
+import { Currency } from '@/lib/currency';
 import { formatDateString } from '@/lib/utils';
 import { Download, RotateCcw, ArrowLeft } from 'lucide-react';
 
@@ -37,371 +37,91 @@ function getNextDate(days: number): string {
 }
 
 export default function DocumentBuilder() {
-  const [documentType, setDocumentType] = useState<'quotation' | 'invoice'>(
-    'quotation'
-  );
-
-  // Header
-  const [documentNumber, setDocumentNumber] = useState(
-    generateDocumentNumber('quotation')
-  );
+  const [documentType, setDocumentType] = useState<'quotation' | 'invoice'>('quotation');
+  const [documentNumber, setDocumentNumber] = useState(generateDocumentNumber('quotation'));
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [validTill, setValidTill] = useState(getNextDate(30));
   const [dueDate, setDueDate] = useState(getNextDate(15));
-
-  // Business Info
   const [businessName, setBusinessName] = useState('OwnTheSite');
   const [businessEmail, setBusinessEmail] = useState('hello@ownthesite.com');
   const [businessPhone, setBusinessPhone] = useState('+1 (555) 123-4567');
   const [businessAddress, setBusinessAddress] = useState('');
-
-  // Client
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientCompany, setClientCompany] = useState('');
-
-  // Line Items
-  const [lineItems, setLineItems] = useState<LineItem[]>([
-    {
-      id: '1',
-      serviceName: '',
-      description: '',
-      quantity: 0,
-      price: 0,
-      total: 0,
-    },
-  ]);
-
-  // Pricing
+  const [lineItems, setLineItems] = useState<LineItem[]>([{ id: '1', serviceName: '', description: '', quantity: 0, price: 0, total: 0 }]);
   const [gstEnabled, setGstEnabled] = useState(true);
   const [gstPercentage, setGstPercentage] = useState(18);
-
-  // Currency
   const [currency, setCurrency] = useState<Currency>('INR');
   const [conversionEnabled, setConversionEnabled] = useState(false);
-
-  // Notes
-  const [notes, setNotes] = useState(
-    '50% upfront, 50% on completion\nTimeline: 5–10 days\nHosting/domain not included'
-  );
+  const [notes, setNotes] = useState('50% upfront, 50% on completion\nTimeline: 5–10 days\nHosting/domain not included');
 
   const pdfRef = useRef<HTMLDivElement>(null);
-
-  // Calculations
-  const updatedLineItems = lineItems.map((item) => ({
-    ...item,
-    total: calculateLineItemTotal(item.quantity, item.price),
-  }));
-
+  const updatedLineItems = lineItems.map((item) => ({ ...item, total: calculateLineItemTotal(item.quantity, item.price) }));
   const subtotal = calculateSubtotal(updatedLineItems);
   const gst = calculateGST(subtotal, gstEnabled, gstPercentage);
   const total = calculateTotal(subtotal, gst);
 
-  // Handlers
   const handleDocumentTypeChange = (type: 'quotation' | 'invoice') => {
     setDocumentType(type);
     setDocumentNumber(generateDocumentNumber(type));
   };
 
-  const handleAddLineItem = () => {
-    const newItem: LineItem = {
-      id: Date.now().toString(),
-      serviceName: '',
-      description: '',
-      quantity: 0,
-      price: 0,
-      total: 0,
-    };
-    setLineItems([...lineItems, newItem]);
-  };
-
-  const handleDeleteLineItem = (id: string) => {
-    setLineItems(lineItems.filter((item) => item.id !== id));
-  };
-
-  const handleDuplicateLineItem = (id: string) => {
-    const item = lineItems.find((i) => i.id === id);
-    if (item) {
-      const newItem = {
-        ...item,
-        id: Date.now().toString(),
-      };
-      setLineItems([...lineItems, newItem]);
-    }
-  };
-
-  const handleUpdateLineItem = (
-    id: string,
-    field: keyof LineItem,
-    value: any
-  ) => {
-    setLineItems(
-      lineItems.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item
-      )
-    );
-  };
-
-  const handleExportPDF = () => {
-    exportToPDF({
-      documentType,
-      documentNumber,
-      date,
-      validTill,
-      dueDate,
-      businessName,
-      businessEmail,
-      businessPhone,
-      businessAddress,
-      clientName,
-      clientEmail,
-      clientPhone,
-      clientCompany,
-      lineItems: updatedLineItems,
-      subtotal,
-      gstEnabled,
-      gstPercentage,
-      gst,
-      total,
-      notes,
-      currency,
-    });
-  };
-
-  const handleCSVImport = (importedItems: LineItem[]) => {
-    setLineItems(importedItems);
-  };
-
-  const handleReset = () => {
-    setDocumentType('quotation');
-    setDocumentNumber(generateDocumentNumber('quotation'));
-    setDate(new Date().toISOString().split('T')[0]);
-    setValidTill('');
-    setDueDate('');
-    setLineItems([]);
-    setBusinessName('OwnTheSite');
-    setBusinessEmail('info@ownthesite.com');
-    setBusinessPhone('+91 9876543210');
-    setBusinessAddress('123 Innovation Street, Delhi, India');
-    setClientName('');
-    setClientEmail('');
-    setClientPhone('');
-    setClientCompany('');
-    setGstEnabled(true);
-    setGstPercentage(18);
-    setNotes('50% upfront, 50% on completion\nTimeline: 5–10 days\nHosting/domain not included');
+  const handleUpdateLineItem = (id: string, field: keyof LineItem, value: any) => {
+    setLineItems(lineItems.map((item) => item.id === id ? { ...item, [field]: value } : item));
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8 flex justify-between items-start">
+    <div className="min-h-screen bg-gray-50 font-inter text-gray-900">
+      <div className="max-w-[1400px] mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-12">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-4xl font-anton uppercase tracking-tighter text-gray-900">
               Document Builder
             </h1>
-            <p className="text-gray-600">
-              Create and export quotations and invoices as PDF
+            <p className="text-gray-500 text-sm mt-1 uppercase tracking-widest font-medium">
+              Quotes & Invoices
             </p>
           </div>
           <Link href="/">
-            <Button variant="outline" className="border-gray-300">
+            <Button variant="outline" className="border-gray-300 uppercase text-xs tracking-widest font-bold">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+              Home
             </Button>
           </Link>
         </div>
 
-        {/* Document Type Toggle */}
-        <div className="mb-8">
-          <Tabs
-            value={documentType}
-            onValueChange={(value) =>
-              handleDocumentTypeChange(value as 'quotation' | 'invoice')
-            }
-            className="w-full"
-          >
-            <TabsList className="grid w-full max-w-sm">
-              <TabsTrigger value="quotation">Quotation</TabsTrigger>
-              <TabsTrigger value="invoice">Invoice</TabsTrigger>
-            </TabsList>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Form Side */}
+          <div className="space-y-8 max-h-[calc(100vh-200px)] overflow-y-auto pr-4 custom-scrollbar">
+            <Tabs value={documentType} onValueChange={(v) => handleDocumentTypeChange(v as any)}>
+              <TabsList className="grid w-full grid-cols-2 bg-gray-200 p-1">
+                <TabsTrigger value="quotation" className="uppercase text-[10px] tracking-widest font-bold data-[state=active]:bg-black data-[state=active]:text-white">Quotation</TabsTrigger>
+                <TabsTrigger value="invoice" className="uppercase text-[10px] tracking-widest font-bold data-[state=active]:bg-black data-[state=active]:text-white">Invoice</TabsTrigger>
+              </TabsList>
+            </Tabs>
 
-            <TabsContent value="quotation" className="space-y-8 mt-8">
-              <div className="bg-white rounded-lg p-8 shadow-sm">
-                <CurrencySelector
-                  currency={currency}
-                  conversionEnabled={conversionEnabled}
-                  onCurrencyChange={setCurrency}
-                  onConversionToggle={setConversionEnabled}
-                />
-                <div className="py-8" />
-                <HeaderForm
-                  documentType="quotation"
-                  documentNumber={documentNumber}
-                  date={date}
-                  validTill={validTill}
-                  dueDate={dueDate}
-                  onDocumentNumberChange={setDocumentNumber}
-                  onDateChange={setDate}
-                  onValidTillChange={setValidTill}
-                  onDueDateChange={setDueDate}
-                />
-                <div className="py-8" />
-                <ClientForm
-                  businessName={businessName}
-                  businessEmail={businessEmail}
-                  businessPhone={businessPhone}
-                  businessAddress={businessAddress}
-                  clientName={clientName}
-                  clientEmail={clientEmail}
-                  clientPhone={clientPhone}
-                  clientCompany={clientCompany}
-                  onBusinessNameChange={setBusinessName}
-                  onBusinessEmailChange={setBusinessEmail}
-                  onBusinessPhoneChange={setBusinessPhone}
-                  onBusinessAddressChange={setBusinessAddress}
-                  onClientNameChange={setClientName}
-                  onClientEmailChange={setClientEmail}
-                  onClientPhoneChange={setClientPhone}
-                  onClientCompanyChange={setClientCompany}
-                />
-                <div className="py-8" />
-                <CSVImporter onImport={handleCSVImport} />
-                <div className="py-8" />
-                <LineItemsTable
-                  items={updatedLineItems}
-                  currency={currency}
-                  onAddItem={handleAddLineItem}
-                  onDeleteItem={handleDeleteLineItem}
-                  onDuplicateItem={handleDuplicateLineItem}
-                  onUpdateItem={handleUpdateLineItem}
-                />
-                <div className="py-8" />
-                <SummaryBox
-                  subtotal={subtotal}
-                  gstEnabled={gstEnabled}
-                  gstPercentage={gstPercentage}
-                  gst={gst}
-                  total={total}
-                  currency={currency}
-                  onGstToggle={setGstEnabled}
-                  onGstPercentageChange={setGstPercentage}
-                />
-                <div className="py-8" />
-                <NotesSection notes={notes} onNotesChange={setNotes} />
+            <section className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 space-y-8">
+              <CurrencySelector currency={currency} conversionEnabled={conversionEnabled} onCurrencyChange={setCurrency} onConversionToggle={setConversionEnabled} />
+              <HeaderForm documentType={documentType} documentNumber={documentNumber} date={date} validTill={validTill} dueDate={dueDate} onDocumentNumberChange={setDocumentNumber} onDateChange={setDate} onValidTillChange={setValidTill} onDueDateChange={setDueDate} />
+              <ClientForm businessName={businessName} businessEmail={businessEmail} businessPhone={businessPhone} businessAddress={businessAddress} clientName={clientName} clientEmail={clientEmail} clientPhone={clientPhone} clientCompany={clientCompany} onBusinessNameChange={setBusinessName} onBusinessEmailChange={setBusinessEmail} onBusinessPhoneChange={setBusinessPhone} onBusinessAddressChange={setBusinessAddress} onClientNameChange={setClientName} onClientEmailChange={setClientEmail} onClientPhoneChange={setClientPhone} onClientCompanyChange={setClientCompany} />
+              <CSVImporter onImport={setLineItems} />
+              <LineItemsTable items={updatedLineItems} currency={currency} onAddItem={() => setLineItems([...lineItems, { id: Date.now().toString(), serviceName: '', description: '', quantity: 0, price: 0, total: 0 }])} onDeleteItem={(id) => setLineItems(lineItems.filter(i => i.id !== id))} onDuplicateItem={(id) => { const i = lineItems.find(x => x.id === id); if(i) setLineItems([...lineItems, {...i, id: Date.now().toString()}]) }} onUpdateItem={handleUpdateLineItem} />
+              <SummaryBox subtotal={subtotal} gstEnabled={gstEnabled} gstPercentage={gstPercentage} gst={gst} total={total} currency={currency} onGstToggle={setGstEnabled} onGstPercentageChange={setGstPercentage} />
+              <NotesSection notes={notes} onNotesChange={setNotes} />
+            </section>
 
-                <div className="py-8 flex gap-3 justify-end">
-                  <Button
-                    variant="outline"
-                    onClick={handleReset}
-                    className="border-gray-300"
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Reset
-                  </Button>
-                  <Button
-                    onClick={handleExportPDF}
-                    className="bg-gray-900 text-white hover:bg-gray-800"
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Export as PDF
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
+            <div className="pt-4 sticky bottom-0 bg-gray-50 pb-4">
+              <Button onClick={() => exportToPDF({ documentType, documentNumber, date, validTill, dueDate, businessName, businessEmail, businessPhone, businessAddress, clientName, clientEmail, clientPhone, clientCompany, lineItems: updatedLineItems, subtotal, gstEnabled, gstPercentage, gst, total, notes, currency })} size="lg" className="w-full bg-black text-white hover:bg-gray-800 shadow-xl font-anton uppercase tracking-widest text-lg py-8">
+                <Download className="h-5 w-5 mr-3" />
+                Generate {documentType}
+              </Button>
+            </div>
+          </div>
 
-            <TabsContent value="invoice" className="space-y-8 mt-8">
-              <div className="bg-white rounded-lg p-8 shadow-sm">
-                <CurrencySelector
-                  currency={currency}
-                  conversionEnabled={conversionEnabled}
-                  onCurrencyChange={setCurrency}
-                  onConversionToggle={setConversionEnabled}
-                />
-                <div className="py-8" />
-                <HeaderForm
-                  documentType="invoice"
-                  documentNumber={documentNumber}
-                  date={date}
-                  validTill={validTill}
-                  dueDate={dueDate}
-                  onDocumentNumberChange={setDocumentNumber}
-                  onDateChange={setDate}
-                  onValidTillChange={setValidTill}
-                  onDueDateChange={setDueDate}
-                />
-                <div className="py-8" />
-                <ClientForm
-                  businessName={businessName}
-                  businessEmail={businessEmail}
-                  businessPhone={businessPhone}
-                  businessAddress={businessAddress}
-                  clientName={clientName}
-                  clientEmail={clientEmail}
-                  clientPhone={clientPhone}
-                  clientCompany={clientCompany}
-                  onBusinessNameChange={setBusinessName}
-                  onBusinessEmailChange={setBusinessEmail}
-                  onBusinessPhoneChange={setBusinessPhone}
-                  onBusinessAddressChange={setBusinessAddress}
-                  onClientNameChange={setClientName}
-                  onClientEmailChange={setClientEmail}
-                  onClientPhoneChange={setClientPhone}
-                  onClientCompanyChange={setClientCompany}
-                />
-                <div className="py-8" />
-                <CSVImporter onImport={handleCSVImport} />
-                <div className="py-8" />
-                <LineItemsTable
-                  items={updatedLineItems}
-                  currency={currency}
-                  onAddItem={handleAddLineItem}
-                  onDeleteItem={handleDeleteLineItem}
-                  onDuplicateItem={handleDuplicateLineItem}
-                  onUpdateItem={handleUpdateLineItem}
-                />
-                <div className="py-8" />
-                <SummaryBox
-                  subtotal={subtotal}
-                  gstEnabled={gstEnabled}
-                  gstPercentage={gstPercentage}
-                  gst={gst}
-                  total={total}
-                  currency={currency}
-                  onGstToggle={setGstEnabled}
-                  onGstPercentageChange={setGstPercentage}
-                />
-                <div className="py-8" />
-                <NotesSection notes={notes} onNotesChange={setNotes} />
-
-                <div className="py-8 flex gap-3 justify-end">
-                  <Button
-                    variant="outline"
-                    onClick={handleReset}
-                    className="border-gray-300"
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Reset
-                  </Button>
-                  <Button
-                    onClick={handleExportPDF}
-                    className="bg-gray-900 text-white hover:bg-gray-800"
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Export as PDF
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {/* PDF Preview */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Preview</h2>
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          {/* Preview Side */}
+          <div className="sticky top-8 max-h-[calc(100vh-100px)] overflow-y-auto bg-gray-300 p-12 rounded-2xl shadow-inner custom-scrollbar">
             <PDFPreview
               ref={pdfRef}
               documentType={documentType}
@@ -432,6 +152,11 @@ export default function DocumentBuilder() {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+      `}</style>
     </div>
   );
 }
